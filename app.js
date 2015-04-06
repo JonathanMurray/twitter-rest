@@ -1,11 +1,17 @@
 
 var express = require('express');
-var twitter = require('twitter');
+var Twitter = require('twitter');
 var cors = require('cors');
 
-var app = module.exports = express.createServer();
+var twitter = new Twitter({
+  consumer_key: process.env.TWITTER_CONSUMER_KEY,
+  consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+  access_token_key: process.env.TWITTER_ACCESS_TOKEN,
+  access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
+});
 
-// Configuration
+
+var app = module.exports = express.createServer();
 
 app.configure(function(){
   app.use(cors());
@@ -23,22 +29,20 @@ app.get('/', function(req,res){
 app.get('/tweets/:hashtag', function(req, res) {
   var hashtag = req.param('hashtag');
   console.log("GET /tweets/" + hashtag);
-  var response = {};
-  response["tweets"] = getTweets(hashtag);
-  res.json(response);
+  twitter.get("search/tweets", {q: 'football'}, function(error, data, response){
+    var results = [];
+    var tweets = data["statuses"];
+    for(var i = 0; i < 2; i+=1){
+      var element = tweets[i];
+      var msg = element["text"]
+      var user = element["user"]["name"];
+      var 
+      results.push({"message":msg, "user":user});
+    };
+    res.json({"tweets":results});
+  });
 });
 
-function getTweets(hashtag){
-  var tweets = [];
-  if(hashtag == "yolo"){
-    var tweet = {"message":"yooooolo"};
-  }else{
-    var tweet = {"message":"Some message."};  
-  }
-  tweets.push(tweet);
-  tweets.push({"message":"tweeeet"});
-  return tweets;
-}
 
 app.listen((process.env.PORT || 5000), function(){
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
