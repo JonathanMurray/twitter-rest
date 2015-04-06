@@ -32,7 +32,7 @@ app.get('/tweets/:hashtag', function(req, res) {
   twitter.get("search/tweets", {q: 'football'}, function(error, data, response){
     var results = [];
     var tweets = data["statuses"];
-    for(var i = 0; i < 2; i+=1){
+    for(var i = 0; i < 10; i+=1){
       var element = tweets[i];
       var msg = element["text"]
       var user = element["user"]["name"];
