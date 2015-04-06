@@ -1,10 +1,7 @@
 
-/**
- * Module dependencies.
- */
-
-var express = require('express')
-  , twitter = require('twitter');
+var express = require('express');
+var twitter = require('twitter');
+var cors = require('cors');
 
 var app = module.exports = express.createServer();
 
@@ -16,6 +13,7 @@ app.configure(function(){
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
+  app.use(cors());
 });
 
 app.get('/', function(req,res){
