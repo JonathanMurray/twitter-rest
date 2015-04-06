@@ -36,7 +36,6 @@ app.get('/tweets/:hashtag', function(req, res) {
       var element = tweets[i];
       var msg = element["text"]
       var user = element["user"]["name"];
-      var 
       results.push({"message":msg, "user":user});
     };
     res.json({"tweets":results});
