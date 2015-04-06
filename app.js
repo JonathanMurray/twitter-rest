@@ -29,7 +29,7 @@ app.get('/', function(req,res){
 app.get('/tweets/:hashtag', function(req, res) {
   var hashtag = req.param('hashtag');
   console.log("GET /tweets/" + hashtag);
-  twitter.get("search/tweets", {q: 'football'}, function(error, data, response){
+  twitter.get("search/tweets", {q: hashtag}, function(error, data, response){
     var results = [];
     var tweets = data["statuses"];
     for(var i = 0; i < 10; i+=1){
