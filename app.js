@@ -4,7 +4,6 @@
  */
 
 var express = require('express')
-  , routes = require('./routes')
   , twitter = require('twitter');
 
 var app = module.exports = express.createServer();
@@ -19,17 +18,29 @@ app.configure(function(){
   app.use(express.static(__dirname + '/public'));
 });
 
-app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+app.get('/', function(req,res){
+  res.send("use '/tweets/:hashtag'");
 });
 
-app.configure('production', function(){
-  app.use(express.errorHandler());
+app.get('/tweets/:hashtag', function(req, res) {
+  var hashtag = req.param('hashtag');
+  console.log("GET /tweets/" + hashtag);
+  var response = {};
+  response["tweets"] = getTweets(hashtag);
+  res.json(response);
 });
 
-// Routes
-
-app.get('/', routes.index);
+function getTweets(hashtag){
+  var tweets = [];
+  if(hashtag == "yolo"){
+    var tweet = {"message":"yooooolo"};
+  }else{
+    var tweet = {"message":"Some message."};  
+  }
+  tweets.push(tweet);
+  tweets.push({"message":"tweeeet"});
+  return tweets;
+}
 
 app.listen((process.env.PORT || 5000), function(){
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
